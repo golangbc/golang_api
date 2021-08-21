@@ -3,8 +3,8 @@ package routes
 import (
 	"database/sql"
 
+	"github.com/KatsutoshiOtogawa/golang_api/handler/users"
 	"github.com/gin-gonic/gin"
-	"github.com/KatsutoshiOtogawa/golang_api/users"
 )
 
 // 管理者権限、バッチのみ使える処理をここにまとめます。
