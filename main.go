@@ -14,8 +14,8 @@ func main() {
 
 	db, _ := sql.Open("sqlite3", "sqlite3.db")
 
-	// 管理者権限のルート
-	routes.Admin(r, db)
+	// ルートの割当を行います。
+	routes.Invoke(r,db)
 
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
