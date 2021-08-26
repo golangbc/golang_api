@@ -7,23 +7,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 管理者権限、バッチのみ使える処理をここにまとめます。
-func Login(c *gin.Context, db *sql.DB) {
+// middleware
+func CheckLogin(db *sql.DB) gin.HandlerFunc {
 
-	session := sessions.Default(c)
+	return func(c *gin.Context) {
+		session := sessions.Default(c)
 
-	if IsLogin() {
+		if IsLogin() {
 
-	} else if LoginAuth() {
-		session.Set("hello", "world")
-		session.Save()
+		}
+		// if session.Get("hello") != "world" {
+		// 	session.Set("hello", "world")
+		// 	session.Save()
+		// }
+
+		c.JSON(200, gin.H{"hello": session.Get("hello")})
 	}
-	// if session.Get("hello") != "world" {
-	// 	session.Set("hello", "world")
-	// 	session.Save()
-	// }
-
-	c.JSON(200, gin.H{"hello": session.Get("hello")})
 }
 
 func IsLogin() bool {
@@ -31,7 +30,13 @@ func IsLogin() bool {
 	return true
 }
 
-func LoginAuth() bool {
-	// loginしてたら、
-	return true
+func LoginAuth(db *sql.DB) gin.HandlerFunc {
+
+	return func(c *gin.Context) {
+		session := sessions.Default(c)
+
+		session.Set("hello", "world")
+		session.Save()
+
+	}
 }

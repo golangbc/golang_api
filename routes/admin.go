@@ -11,5 +11,5 @@ import (
 func Admin(r *gin.Engine, db *sql.DB) {
 	// 管理者権限のみ使える処理。
 	admin := r.Group("admin")
-	admin.GET("/hello", func(c *gin.Context) { users.Hello(c, db) })
+	admin.GET("/hello", users.Hello(db))
 }

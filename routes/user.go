@@ -16,6 +16,6 @@ func User(r *gin.Engine, db *sql.DB) {
 	// {
 	// 	user.GET("/users/hello", func(c *gin.Context) { users.Hello(c, db) })
 	// }
-	user.GET("/users/hello", func(c *gin.Context) { users.Hello(c, db) })
+	user.GET("/hello", users.Hello(db))
 
 }
