@@ -11,6 +11,7 @@ import (
 // 各ルートの割当をここに書きます。
 func Invoke(r *gin.Engine, db *sql.DB) {
 
+	// os.Environ("secret")
 	store := cookie.NewStore([]byte("secret"))
 	r.Use(sessions.Sessions("mysession", store))
 	// 管理者権限のみ入るルート

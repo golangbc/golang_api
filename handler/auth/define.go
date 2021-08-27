@@ -1,6 +1,8 @@
 package auth
 
+type LoginFlg = uint
+
 const (
-	AdminLoginFlg uint = 1
+	AdminLoginFlg LoginFlg = 1 << iota
 	UserLoginFlg
 )

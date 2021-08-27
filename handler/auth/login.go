@@ -1,42 +1,69 @@
 package auth
 
 import (
-	"database/sql"
-
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
-// middleware
-func CheckLogin(db *sql.DB) gin.HandlerFunc {
+func IsLogin(loginFlg LoginFlg, c *gin.Context) bool {
 
-	return func(c *gin.Context) {
-		session := sessions.Default(c)
+	var isLogin bool
+	session := sessions.Default(c)
 
-		if IsLogin() {
-
-		}
-		// if session.Get("hello") != "world" {
-		// 	session.Set("hello", "world")
-		// 	session.Save()
-		// }
-
-		c.JSON(200, gin.H{"hello": session.Get("hello")})
+	var key string
+	if loginFlg == AdminLoginFlg {
+		key = "AdminId"
+	} else if loginFlg == UserLoginFlg {
+		key = "UserId"
 	}
+
+	value := session.Get(key)
+
+	if value != nil {
+		isLogin = true
+	}
+
+	return isLogin
 }
 
-func IsLogin() bool {
-	// loginしてたら、loginCheckMiddleWareを呼ぶ。
-	return true
+func SetLogin(value string, loginFlg LoginFlg, c *gin.Context) error {
+
+	session := sessions.Default(c)
+
+	var key string
+	if loginFlg == AdminLoginFlg {
+		key = "AdminId"
+	} else if loginFlg == UserLoginFlg {
+		key = "UserId"
+	}
+
+	session.Set(key, value)
+
+	err := session.Save()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func LoginAuth(db *sql.DB) gin.HandlerFunc {
+func TruncateLogin(loginFlg LoginFlg, c *gin.Context) error {
 
-	return func(c *gin.Context) {
-		session := sessions.Default(c)
+	session := sessions.Default(c)
 
-		session.Set("hello", "world")
-		session.Save()
-
+	var key string
+	if loginFlg == AdminLoginFlg {
+		key = "AdminId"
+	} else if loginFlg == UserLoginFlg {
+		key = "UserId"
 	}
+
+	session.Delete(key)
+
+	err := session.Save()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
